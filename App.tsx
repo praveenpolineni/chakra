@@ -1,15 +1,17 @@
 // App.tsx
-// This is the entry point of CHAKRA.
-// It loads the fonts first, then shows the app.
+// Now App.tsx does two things:
+// 1. Loads fonts
+// 2. Sets up navigation between screens
 
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { View } from 'react-native';
 import { useFonts, DMSerifDisplay_400Regular } from '@expo-google-fonts/dm-serif-display';
 import { DMSans_400Regular, DMSans_500Medium } from '@expo-google-fonts/dm-sans';
 import * as SplashScreen from 'expo-splash-screen';
-import WelcomeScreen from './screens/WelcomeScreen';
 
-// Keep splash screen visible while fonts load
+import WelcomeScreen from './screens/WelcomeScreen';
+import RhythmScreen from './screens/RhythmScreen';
+
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
@@ -18,20 +20,21 @@ export default function App() {
     DMSans_400Regular,
     DMSans_500Medium,
   });
+  const [screen, setScreen] = useState<'welcome' | 'rhythm'>('welcome');
 
-  // Hide splash screen once fonts are ready
   const onLayoutRootView = useCallback(async () => {
-    if (fontsLoaded) {
-      await SplashScreen.hideAsync();
-    }
+    if (fontsLoaded) await SplashScreen.hideAsync();
   }, [fontsLoaded]);
 
-  // Don't render anything until fonts are loaded
   if (!fontsLoaded) return null;
 
   return (
     <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
-      <WelcomeScreen />
+      {screen === 'welcome' ? (
+        <WelcomeScreen onBegin={() => setScreen('rhythm')} />
+      ) : (
+        <RhythmScreen />
+      )}
     </View>
   );
 }
