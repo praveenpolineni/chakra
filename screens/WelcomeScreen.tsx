@@ -13,24 +13,21 @@ import {
 } from 'react-native';
 import { colors, fonts, spacing, radius } from '../constants/theme';
 
-// This tells TypeScript what props this screen accepts
 type Props = {
   onBegin?: () => void;
+  onLogin?: () => void;
 };
 
 // Get screen height so we can space things proportionally
 const { height } = Dimensions.get('window');
 
-export default function WelcomeScreen({ onBegin }: Props) {
-  // This runs when user taps "Begin"
+export default function WelcomeScreen({ onBegin, onLogin }: Props) {
   const handleBegin = () => {
     onBegin?.();
   };
 
-  // This runs when user taps "I already have an account"
   const handleLogin = () => {
-    console.log('Login tapped');
-    // Later: navigation.navigate('Login')
+    onLogin?.();
   };
 
   return (
